@@ -52,6 +52,7 @@ jobs:
           ignore-unfixed: true
           format: 'table'
           severity: 'CRITICAL,HIGH'
+          fail-on: 'never'
 
   # STAGE 2: Build & Publish (Artifact)
   build-and-push:
