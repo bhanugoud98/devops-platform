@@ -1,0 +1,30 @@
+# OS & IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Build & Runtime
+__pycache__/
+*.py[cod]
+*.so
+node_modules/
+dist/
+build/
+
+# Application Secrets (CRITICAL)
+.env
+.env.*
+secrets.yaml
+*.pem
+*.key
+
+# Terraform (Infrastructure State)
+# WE NEVER COMMIT STATE TO GIT. IT CONTAINS SECRETS.
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+terraform.tfvars
+
+# Logs
+*.log

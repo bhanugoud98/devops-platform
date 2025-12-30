@@ -1,0 +1,54 @@
+---
+- name: Harden Bastion Host
+  hosts: bastion
+  become: yes # Run as root (sudo)
+  vars:
+    allowed_ssh_users: "ec2-user"
+
+  tasks:
+    - name: 1. Update all packages
+      yum:
+        name: "*"
+        state: latest
+      tags: [security, update]
+
+    - name: 2. Install Standard Tools (Git, Htop, Vim)
+      yum:
+        name:
+          - git
+          - htop
+          - vim
+        state: present
+
+    - name: 3. Install Fail2Ban (Intrusion Prevention)
+      yum:
+        name: fail2ban
+        state: present
+
+    - name: 4. Ensure Fail2Ban is running
+      service:
+        name: fail2ban
+        state: started
+        enabled: yes
+
+    - name: 5. Secure SSH - Disable Root Login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart SSH
+
+    - name: 6. Secure SSH - Disable Password Auth
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted

@@ -1,0 +1,20 @@
+# Trivy Configuration
+scan:
+  security-checks:
+    - vuln
+    - config
+
+vulnerability:
+  type:
+    - os
+    - library
+
+severity:
+  - CRITICAL
+  - HIGH
+
+# Exit with code 1 if issues found (Fails Pipeline)
+exit-code: 1
+
+# Ignore vulnerabilities that don't have a fix yet
+ignore-unfixed: true

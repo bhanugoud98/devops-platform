@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payments-config
+  namespace: payments-ns
+data:
+  LOG_LEVEL: "INFO"
+  ENVIRONMENT: "production"
+  APP_VERSION: "v1.0.0"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: payments-secret
+  namespace: payments-ns
+type: Opaque
+data:
+  # "supersecret" in base64.
+  # In real life, use ExternalSecrets Operator or SealedSecrets. Never commit this.
+  DB_PASSWORD: c3VwZXJzZWNyZXQ=

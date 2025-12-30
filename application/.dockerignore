@@ -1,0 +1,22 @@
+# Exclude local dev environment
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Exclude secrets (CRITICAL)
+.env
+.env.*
+secrets.yaml
+
+# Exclude git history (reduces build time)
+.git/
+.github/
+
+# Exclude docs
+docs/
+README.md
+
+# Exclude Tests (Usually run in CI before build, but optional to include if running tests inside)
+# For this prod image, we exclude them to keep it small.
+tests/

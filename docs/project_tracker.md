@@ -1,0 +1,69 @@
+# Enterprise DevOps Platform - Project Tracker
+
+This document tracks our progress through the 13 phases of building an Enterprise Cloud-Native Application Platform.
+
+- [x] **PHASE 0 – PROJECT UNDERSTANDING (FOUNDATION)** <!-- id: 0 -->
+    - [x] Understand the Business Problem & DevOps Solution
+    - [x] DevOps Lifecycle Mapping
+    - [x] High-Level Architecture Design
+    - [x] Tool Selection & Justification
+    - [x] "Day in the Life" & Real World Expectations
+- [x] **PHASE 1 – LINUX & GIT (PRODUCTION FOUNDATION)** <!-- id: 1 -->
+    - [x] Production Linux Server Prep
+    - [x] Directory Structure Standards
+    - [x] Git Repository Architecture
+    - [x] Branching Strategy (GitFlow/Trunk)
+    - [x] Establishing the "Golden Workflow"
+- [x] **PHASE 2 – APPLICATION SETUP (REALISTIC)** <!-- id: 2 -->
+    - [x] Create Microservice (Python/Go/Node)
+    - [x] Configuration Management (Env vars)
+    - [x] Logging Standards
+    - [x] Developer Handoff Simulation
+- [x] **PHASE 3 – DOCKER (CONTAINERIZATION)** <!-- id: 3 -->
+    - [x] Dockerfile Best Practices
+    - [x] Image Layer Optimization
+    - [x] Tagging & Versioning Strategy
+    - [x] Local Container Testing
+- [x] **PHASE 4 – CI/CD WITH GITHUB ACTIONS** <!-- id: 4 -->
+    - [x] Pipeline Design
+    - [x] CI Stages (Build, Test, Scan)
+    - [x] Security Integration (Trivy)
+    - [x] CD Stages (Deploy to Dev/Test/Prod)
+- [x] **PHASE 5 – AWS CLOUD (REAL INFRA)** <!-- id: 5 -->
+    - [x] Network Design (VPC, Subnets, Route Tables)
+    - [x] Security Design (SG, NACL, IAM)
+    - [x] Compute Setup (EC2)
+    - [x] Storage (S3)
+- [ ] **PHASE 6 – TERRAFORM (INFRASTRUCTURE AS CODE)** <!-- id: 6 -->
+    - [ ] Project Structure & Modules
+    - [ ] State Management (S3 Backend + Locking)
+    - [ ] Provisioning VPC & EC2
+    - [ ] Drift Detection & Management
+- [x] **PHASE 7 – KUBERNETES (REAL CLUSTER OPERATIONS)** <!-- id: 7 -->
+    - [x] Cluster Architecture Deep Dive
+    - [x] Manifest Management (Deployments, Services)
+    - [x] ConfigMaps & Secrets
+    - [x] Scaling & Healing
+    - [x] Troubleshooting Operations
+- [x] **PHASE 8 – ANSIBLE (AUTOMATION)** <!-- id: 8 -->
+    - [x] Dynamic Inventory
+    - [x] Playbook Design
+    - [x] Role Management
+    - [x] Configuration Drift Management
+- [x] **PHASE 9 – MONITORING & ALERTING** <!-- id: 9 -->
+    - [x] Metrics Collection (CloudWatch/Prometheus)
+    - [x] Dashboard Creation
+    - [x] Alerting Rules
+- [x] **PHASE 10 – INCIDENT MANAGEMENT (REAL OPERATIONS)** <!-- id: 10 -->
+    - [x] Incident Simulation
+    - [x] Root Cause Analysis (RCA)
+    - [x] Post-Mortem Reporting
+- [x] **PHASE 11 – SECURITY & BEST PRACTICES** <!-- id: 11 -->
+    - [x] DevSecOps pipeline integration
+    - [x] IAM Review & Audit
+    - [x] Secret Rotation policies
+- [x] **PHASE 12 – DOCUMENTATION (RESUME + INTERVIEW READY)** <!-- id: 12 -->
+    - [x] Technical Documentation (README/Architecture)
+    - [x] Runbooks & SOPs
+    - [x] Resume Integration Strategy
+    - [x] Mock Interview Prep

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-deployment
+  namespace: payments-ns
+  labels:
+    app: payments-service
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: payments-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: payments-service
+    spec:
+      containers:
+        - name: payments-service
+          image: myorg/payments-service:v1.0.0 # From Phase 3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+
+          # 12-Factor Config Injection
+          envFrom:
+            - configMapRef:
+                name: payments-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payments-secret
+                  key: DB_PASSWORD
+
+          # Self-Healing & Traffic Flow checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          # Quality of Service (QoS) - Guaranteed
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000 # appuser

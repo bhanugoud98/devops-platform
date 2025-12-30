@@ -1,0 +1,103 @@
+name: Enterprise CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  DOCKER_IMAGE: myorg/payments-service
+  AWS_REGION: us-east-1
+
+jobs:
+  # STAGE 1: Continuous Integration (Quality & Security)
+  ci-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        working-directory: ./application
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r src/requirements.txt
+          pip install pytest flake8
+
+      - name: Run Linting (Flake8)
+        working-directory: ./application
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings (for now)
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run Unit Tests (PyTest)
+        working-directory: ./application
+        env:
+          PYTHONPATH: src
+        run: |
+          pytest tests/
+
+      - name: Security Scan (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+
+  # STAGE 2: Build & Publish (Artifact)
+  build-and-push:
+    needs: ci-checks # Only run if CI passed
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Don't push images on PRs
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Simulation: In real life, we would login to DockerHub/ECR
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker Image
+        working-directory: ./application
+        run: |
+          docker build -t $DOCKER_IMAGE:${{ github.sha }} .
+          docker tag $DOCKER_IMAGE:${{ github.sha }} $DOCKER_IMAGE:latest
+
+      # Simulation
+      - name: Push Docker Image
+        run: echo "docker push $DOCKER_IMAGE:${{ github.sha }}"
+
+  # STAGE 3: Continuous Deployment (Release)
+  deploy-dev:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Deploy to EKS (Dev)
+        run: |
+          echo "Deploying ${{ github.sha }} to Development Cluster..."
+          # Real command: kubectl set image deployment/payments-service app=$DOCKER_IMAGE:${{ github.sha }}
+
+  deploy-prod:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production # This triggers manual approval rules in GitHub
+    steps:
+      - name: Deploy to EKS (Prod)
+        run: |
+          echo "Deploying ${{ github.sha }} to PRODUCTION Cluster..."
+          echo "Traffic shifting enabled..."
